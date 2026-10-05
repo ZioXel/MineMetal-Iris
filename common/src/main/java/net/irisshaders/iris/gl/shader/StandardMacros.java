@@ -1,7 +1,7 @@
 package net.irisshaders.iris.gl.shader;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.compat.dh.DHCompat;
@@ -16,9 +16,9 @@ import net.irisshaders.iris.platform.IrisPlatformHelpers;
 import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20C;
-import org.lwjgl.opengl.GL30C;
+import net.irisshaders.iris.metal.gl.GL11;
+import net.irisshaders.iris.metal.gl.GL20C;
+import net.irisshaders.iris.metal.gl.GL30C;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -2,7 +2,7 @@ package net.irisshaders.iris.targets;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.renderpearl.api.GpuFormat;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.renderpearl.api.textures.AddressMode;
 import com.mojang.renderpearl.api.textures.FilterMode;
@@ -15,8 +15,8 @@ import net.irisshaders.iris.platform.IrisPlatformHelpers;
 import net.irisshaders.iris.shaderpack.properties.PackDirectives;
 import net.irisshaders.iris.shaderpack.properties.PackRenderTargetDirectives;
 import org.joml.Vector2i;
-import org.lwjgl.opengl.GL20C;
-import org.lwjgl.opengl.GL30C;
+import net.irisshaders.iris.metal.gl.GL20C;
+import net.irisshaders.iris.metal.gl.GL30C;
 
 import java.util.ArrayList;
 import java.util.Arrays;

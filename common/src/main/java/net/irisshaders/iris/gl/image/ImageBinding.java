@@ -1,7 +1,7 @@
 package net.irisshaders.iris.gl.image;
 
 import net.irisshaders.iris.gl.IrisRenderSystem;
-import org.lwjgl.opengl.GL42C;
+import net.irisshaders.iris.metal.gl.GL42C;
 
 import java.util.function.IntSupplier;
 

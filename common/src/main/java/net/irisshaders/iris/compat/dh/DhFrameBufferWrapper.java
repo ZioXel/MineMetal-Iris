@@ -2,7 +2,7 @@ package net.irisshaders.iris.compat.dh;
 
 import com.seibel.distanthorizons.api.interfaces.override.rendering.IDhApiFramebuffer;
 import net.irisshaders.iris.gl.framebuffer.GlFramebuffer;
-import org.lwjgl.opengl.GL32;
+import net.irisshaders.iris.metal.gl.GL32;
 
 public class DhFrameBufferWrapper implements IDhApiFramebuffer {
 	private final GlFramebuffer framebuffer;

@@ -1,11 +1,11 @@
 package net.irisshaders.iris.uniforms.custom.cached;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import kroppeb.stareval.function.FunctionReturn;
 import kroppeb.stareval.function.Type;
 import net.irisshaders.iris.gl.uniform.UniformUpdateFrequency;
-import org.lwjgl.opengl.GL21;
+import net.irisshaders.iris.metal.gl.GL21;
 
 import java.util.function.IntSupplier;
 

@@ -1,6 +1,6 @@
 package net.irisshaders.iris.gl.program;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.GlResource;
 import net.irisshaders.iris.gl.IrisRenderSystem;
@@ -8,8 +8,8 @@ import net.irisshaders.iris.pipeline.WorldRenderingPipeline;
 import net.irisshaders.iris.shaderpack.FilledIndirectPointer;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
-import org.lwjgl.opengl.GL43C;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL43C;
+import net.irisshaders.iris.metal.gl.GL46C;
 
 public final class ComputeProgram extends GlResource {
 	private final ProgramUniforms uniforms;

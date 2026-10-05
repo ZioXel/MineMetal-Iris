@@ -13,7 +13,7 @@ import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.irisshaders.iris.mixinterface.RenderTargetInterface;
 import net.irisshaders.iris.targets.Blaze3dRenderTargetExt;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL43C;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

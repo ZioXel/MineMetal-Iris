@@ -2,9 +2,9 @@ package net.irisshaders.iris.gl.texture;
 
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.GlVersion;
-import org.lwjgl.opengl.GL11C;
-import org.lwjgl.opengl.GL12C;
-import org.lwjgl.opengl.GL30C;
+import net.irisshaders.iris.metal.gl.GL11C;
+import net.irisshaders.iris.metal.gl.GL12C;
+import net.irisshaders.iris.metal.gl.GL30C;
 
 import java.util.Locale;
 import java.util.Optional;

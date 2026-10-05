@@ -6,7 +6,7 @@ import net.irisshaders.iris.gl.uniform.UniformUpdateFrequency;
 import net.irisshaders.iris.parsing.MatrixType;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
-import org.lwjgl.opengl.GL21;
+import net.irisshaders.iris.metal.gl.GL21;
 
 import java.util.function.Supplier;
 

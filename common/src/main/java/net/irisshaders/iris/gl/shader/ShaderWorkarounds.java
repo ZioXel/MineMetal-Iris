@@ -15,7 +15,7 @@
 package net.irisshaders.iris.gl.shader;
 
 import org.lwjgl.PointerBuffer;
-import org.lwjgl.opengl.GL20C;
+import net.irisshaders.iris.metal.gl.GL20C;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 

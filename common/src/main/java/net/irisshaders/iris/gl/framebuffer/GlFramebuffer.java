@@ -1,6 +1,6 @@
 package net.irisshaders.iris.gl.framebuffer;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.renderpearl.backend.opengl.GlTexture;
 import com.mojang.renderpearl.api.textures.GpuTexture;
 import it.unimi.dsi.fastutil.ints.Int2IntArrayMap;
@@ -9,7 +9,7 @@ import net.irisshaders.iris.gl.GlResource;
 import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.irisshaders.iris.gl.texture.DepthBufferFormat;
 import net.irisshaders.iris.pbr.TextureInfoCache;
-import org.lwjgl.opengl.GL30C;
+import net.irisshaders.iris.metal.gl.GL30C;
 
 public class GlFramebuffer extends GlResource {
 	private final Int2IntMap attachments;

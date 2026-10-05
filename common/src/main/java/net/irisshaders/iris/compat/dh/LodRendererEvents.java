@@ -1,6 +1,6 @@
 package net.irisshaders.iris.compat.dh;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.seibel.distanthorizons.api.DhApi;
 import com.seibel.distanthorizons.api.enums.rendering.EDhApiFogDrawMode;
@@ -33,8 +33,8 @@ import net.irisshaders.iris.shadows.ShadowRenderer;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
 import net.irisshaders.iris.uniforms.CapturedRenderingState;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.opengl.GL43C;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL43C;
+import net.irisshaders.iris.metal.gl.GL46C;
 
 public class LodRendererEvents {
 	private static boolean eventHandlersBound = false;

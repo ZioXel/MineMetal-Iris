@@ -1,7 +1,7 @@
 package net.irisshaders.iris.compat.dh;
 
 import com.google.common.primitives.Ints;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.seibel.distanthorizons.api.DhApi;
 import com.seibel.distanthorizons.api.objects.math.DhApiVec3f;
@@ -29,9 +29,9 @@ import net.minecraft.client.Minecraft;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
-import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL43C;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL32;
+import net.irisshaders.iris.metal.gl.GL43C;
+import net.irisshaders.iris.metal.gl.GL46C;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.FloatBuffer;

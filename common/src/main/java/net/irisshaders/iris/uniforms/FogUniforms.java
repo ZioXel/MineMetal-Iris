@@ -8,7 +8,7 @@ import net.irisshaders.iris.gl.uniform.DynamicUniformHolder;
 import net.irisshaders.iris.gl.uniform.UniformUpdateFrequency;
 import net.minecraft.client.Minecraft;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
+import net.irisshaders.iris.metal.gl.GL11;
 
 import static net.irisshaders.iris.gl.uniform.UniformUpdateFrequency.PER_FRAME;
 

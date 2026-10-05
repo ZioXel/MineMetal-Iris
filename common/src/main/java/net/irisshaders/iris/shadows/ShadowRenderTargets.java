@@ -16,7 +16,7 @@ import net.irisshaders.iris.gl.texture.InternalTextureFormat;
 import net.irisshaders.iris.pipeline.WorldRenderingPipeline;
 import net.irisshaders.iris.shaderpack.properties.PackShadowDirectives;
 import net.irisshaders.iris.targets.RenderTarget;
-import org.lwjgl.opengl.GL30C;
+import net.irisshaders.iris.metal.gl.GL30C;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,7 +9,7 @@ import net.irisshaders.iris.gl.texture.InternalTextureFormat;
 import net.irisshaders.iris.helpers.StringPair;
 import net.irisshaders.iris.shaderpack.preprocessor.JcppProcessor;
 import org.apache.commons.io.IOUtils;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL43C;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

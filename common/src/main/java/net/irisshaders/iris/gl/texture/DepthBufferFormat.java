@@ -2,8 +2,8 @@ package net.irisshaders.iris.gl.texture;
 
 import com.mojang.renderpearl.api.GpuFormat;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL30C;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL30C;
+import net.irisshaders.iris.metal.gl.GL43C;
 
 import java.util.Objects;
 

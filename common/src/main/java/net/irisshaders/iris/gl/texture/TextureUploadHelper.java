@@ -1,7 +1,7 @@
 package net.irisshaders.iris.gl.texture;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
-import org.lwjgl.opengl.GL20C;
+import net.irisshaders.iris.metal.gl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GL20C;
 
 public class TextureUploadHelper {
 	private TextureUploadHelper() {

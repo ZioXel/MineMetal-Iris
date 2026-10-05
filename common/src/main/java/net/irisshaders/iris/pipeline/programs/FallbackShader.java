@@ -2,7 +2,7 @@ package net.irisshaders.iris.pipeline.programs;
 
 import com.mojang.renderpearl.backend.opengl.GlProgram;
 import com.mojang.renderpearl.backend.opengl.GlRenderPass;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.mojang.renderpearl.api.pipeline.UniformType;
@@ -18,8 +18,8 @@ import net.irisshaders.iris.mixinterface.ShaderInstanceInterface;
 import net.irisshaders.iris.pipeline.IrisRenderingPipeline;
 import net.irisshaders.iris.uniforms.CapturedRenderingState;
 import net.minecraft.client.renderer.BindGroupLayouts;
-import org.lwjgl.opengl.GL31C;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL31C;
+import net.irisshaders.iris.metal.gl.GL46C;
 
 import java.io.IOException;
 import java.util.ArrayList;
