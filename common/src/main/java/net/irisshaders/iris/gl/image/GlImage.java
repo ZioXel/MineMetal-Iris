@@ -70,6 +70,7 @@ public class GlImage extends GlResource {
 	}
 
 	public void clear() {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return; // TODO MineMetal: image load/store is not supported on Metal yet
 		ARBClearTexture.glClearTexImage(getGlId(), 0, format.getGlFormat(), pixelType.getGlFormat(), (int[]) null);
 	}
 
