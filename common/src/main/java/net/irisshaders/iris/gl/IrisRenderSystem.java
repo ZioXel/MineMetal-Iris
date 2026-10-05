@@ -66,6 +66,9 @@ public class IrisRenderSystem {
 			perspectiveProjectionMatrixBuffer = new ProjectionMatrixBuffer("Iris shadow map projection");
 			samplers = new int[SamplerLimits.get().getMaxTextureUnits()];
 			Iris.logger.info("MineMetal: running Iris on Metal through MineMetal's GL emulation.");
+			// Undo reversed Z like UndoReverseZThree/Five do on GL: MineMetal mirrors depth compare ops, bias and clears.
+			dev.minemetal.client.metal.MetalCommandEncoder.setStandardDepthSupplier(
+				() -> Iris.isPackInUseQuick() && net.irisshaders.iris.vertices.ImmediateState.isRenderingLevel);
 			return;
 		}
 		if (GL.getCapabilities().OpenGL45) {
