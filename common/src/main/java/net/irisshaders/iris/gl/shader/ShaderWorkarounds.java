@@ -36,6 +36,10 @@ public class ShaderWorkarounds {
 	 * <p>Hat tip to fewizz for the find and the fix.
 	 */
 	public static void safeShaderSource(int glId, CharSequence source) {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			net.irisshaders.iris.metal.gl.GlStateManager.glShaderSource(glId, source.toString());
+			return;
+		}
 		final MemoryStack stack = MemoryStack.stackGet();
 		final int stackPointer = stack.getPointer();
 

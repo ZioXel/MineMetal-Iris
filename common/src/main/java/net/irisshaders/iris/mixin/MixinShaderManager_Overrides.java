@@ -72,7 +72,7 @@ public abstract class MixinShaderManager_Overrides {
 
 		WorldRenderingPipeline pipeline = Iris.getPipelineManager().getPipelineNullable();
 
-		if (pipeline instanceof IrisRenderingPipeline irisPipeline && irisPipeline.shouldOverrideShaders() && !ImmediateState.bypass) {
+		if (pipeline instanceof IrisRenderingPipeline irisPipeline && irisPipeline.shouldOverrideShaders() && !ImmediateState.bypass && !net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
 			RenderPipeline newProgram = renderPipeline;
 
 			ShaderKey shaderKey = IrisPipelines.getPipeline(irisPipeline, newProgram);
