@@ -246,6 +246,12 @@ public class FinalPassRenderer {
 			GpuBuffer indices = RenderSystem.getSequentialBuffer(PrimitiveTopology.QUADS).getBuffer(6);
 			var type = RenderSystem.getSequentialBuffer(PrimitiveTopology.QUADS).type();
 
+			if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+				main.iris$bindFramebuffer();
+				finalPass.program.use();
+				this.customUniforms.push(finalPass.program);
+				net.irisshaders.iris.metal.MetalIris.drawFullscreenPass(baseWidth, baseHeight, true);
+			} else
 			try (RenderPass renderPass = RenderSystem.getDevice().createCommandEncoder().createRenderPass(() -> "Final pass", Minecraft.getInstance().gameRenderer.mainRenderTarget().getColorTextureView(), Optional.empty())) {
 				renderPass.setPipeline(RenderSystem.getCompiledPipeline(CompositeRenderer.COMPOSITE_PIPELINE));
 				renderPass.setIndexBuffer(indices, type);

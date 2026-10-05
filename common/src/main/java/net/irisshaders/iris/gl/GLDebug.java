@@ -33,6 +33,9 @@ public final class GLDebug {
 	 */
 	public static int setupDebugMessageCallback() {
 		reloadDebugState();
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			return 0;
+		}
 
 		return setupDebugMessageCallback(System.out);
 	}
@@ -163,6 +166,9 @@ public final class GLDebug {
 	}
 
 	public static int disableDebugMessages() {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			return 1;
+		}
 		GLCapabilities caps = GL.getCapabilities();
 		if (caps.OpenGL43) {
 			GL43C.glDebugMessageCallback(null, 0L);
@@ -303,6 +309,10 @@ public final class GLDebug {
 	}
 
 	public static void reloadDebugState() {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			debugState = new UnsupportedDebugState();
+			return;
+		}
 		if (Iris.getIrisConfig().areDebugOptionsEnabled() && (GL.getCapabilities().GL_KHR_debug || GL.getCapabilities().OpenGL43)) {
 			debugState = new KHRDebugState();
 		} else {

@@ -28,3 +28,18 @@ Licensed LGPL-3.0 like upstream Iris.
 ## Building
 
 `./metal.sh build` builds the Fabric jar and installs it into `../MineMetal/run/mods-stage0` for testing.
+
+## Stage 1 – post-processing on Metal (in progress)
+
+When MineMetal's Metal backend is active (`MetalGlBridge.isMetal()`), the fork:
+
+- routes all GL calls through the generated facades in `net.irisshaders.iris.metal.gl` to MineMetal's `GLDispatch`/`MetalGL`;
+- uses the bind-based (non-DSA) code paths, no compute / image load-store / SSBO / per-buffer blending;
+- gives renderpearl textures GL names (`MixinGpuTexture2` → `MetalIris.glId`) and binds Minecraft's main target as an
+  emulated framebuffer (`MixinRenderTarget` → `MetalIris.bindFramebuffer`);
+- replaces the "custom pass on a renderpearl RenderPass" trick (final pass, center depth sampler) with direct emulated draws;
+- does **not** create gbuffer or shadow programs, does not render shadows, keeps Sodium's compact vertex format and
+  Minecraft's reversed-Z projection – the world is still drawn by the vanilla Metal pipelines;
+- copies the main color target into `colortex0` before the composite passes so deferred/composite/final have a scene.
+
+Build order: `cd ../MineMetal && ./mm.sh build`, then `./metal.sh build`, then `cd ../MineMetal && ./mm.sh run -PirisMetal`.

@@ -233,7 +233,8 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 		this.occlusionCulling = programSet.getPackDirectives().shouldUseOcclusionCulling();
 		this.resolver = new ProgramFallbackResolver(programSet);
 		this.pack = programSet.getPack();
-        WorldRenderingSettings.INSTANCE.setVertexFormat(
+        // MineMetal stage 1: vanilla (Metal) pipelines draw the world, so keep Sodium's compact vertex format there.
+        WorldRenderingSettings.INSTANCE.setVertexFormat(net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal() ? net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.ChunkMeshFormats.COMPACT :
                 FormatAnalyzer.createFormat(true, true, true, true)); // TODO 26.2... or never.
 
 		RenderTarget main = Minecraft.getInstance().gameRenderer.mainRenderTarget();
@@ -323,7 +324,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 			return shadowRenderTargets;
 		};
 
-		if (shadowDirectives.isShadowEnabled() == OptionalBoolean.TRUE) {
+		if (shadowDirectives.isShadowEnabled() == OptionalBoolean.TRUE && !net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
 			shadowTargetsSupplier.get();
 		}
 
@@ -411,6 +412,10 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 
 
 		ShaderLoadingMap loadingMap = new ShaderLoadingMap((key, patchType) -> {
+			if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+				// MineMetal stage 1: the world is drawn by the vanilla Metal pipelines; gbuffer/shadow programs come later.
+				return null;
+			}
 			try {
 				if (key.isShadow()) {
 					return createShadowShader(key.getName(), resolver.resolve(key.getProgram()), key, patchType);
@@ -461,7 +466,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 			this.shadowCompositeRenderer = new ShadowCompositeRenderer(this, programSet.getPackDirectives(), programSet.getComposite(ProgramArrayId.ShadowComposite), programSet.getCompute(ProgramArrayId.ShadowComposite), this.shadowRenderTargets, this.shaderStorageBufferHolder, customTextureManager.getNoiseTexture(), updateNotifier,
 				customTextureManager.getCustomTextureIdMap(TextureStage.SHADOWCOMP), customImages, programSet.getPackDirectives().getExplicitFlips("shadowcomp_pre"), customTextureManager.getIrisCustomTextures(), customUniforms);
 
-			if (programSet.getPackDirectives().getShadowDirectives().isShadowEnabled().orElse(true)) {
+			if (programSet.getPackDirectives().getShadowDirectives().isShadowEnabled().orElse(true) && !net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
 				this.shadowRenderer = new ShadowRenderer(this, resolver.resolveNullable(ProgramId.ShadowSolid),
 					programSet.getPackDirectives(), shadowRenderTargets, shadowCompositeRenderer, customUniforms, programSet.getPack().hasFeature(FeatureFlags.SEPARATE_HARDWARE_SAMPLERS));
 			} else {
@@ -509,7 +514,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 			ComputeProgram.unbind();
 		}
 
-		if (programSet.getPackDirectives().supportsColorCorrection()) {
+		if (programSet.getPackDirectives().supportsColorCorrection() || net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
 			colorSpaceConverter = new ColorSpaceConverter() {
 				@Override
 				public void rebuildProgram(int width, int height, ColorSpace colorSpace) {
@@ -1090,12 +1095,16 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 	public void finalizeLevelRendering() {
 		isRenderingWorld = false;
 		removePhaseIfNeeded();
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			net.irisshaders.iris.metal.MetalIris.copyMainColorToColortex0(renderTargets);
+		}
 		compositeRenderer.renderAll();
 		finalPassRenderer.renderFinalPass();
 	}
 
 	@Override
 	public void finalizeGameRendering() {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return;
 		colorSpaceConverter.process((GlTexture) Minecraft.getInstance().gameRenderer.mainRenderTarget().getColorTexture());
 	}
 

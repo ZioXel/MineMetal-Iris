@@ -53,6 +53,7 @@ public class FullScreenQuadRenderer {
 	}
 
 	public void bind() {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return; // MineMetal draws its own fullscreen quad
 		var frontend = ((FrontendRenderPipeline) RenderSystem.getCompiledPipeline(CompositeRenderer.COMPOSITE_PIPELINE));
 		var backend = ((GlRenderPipeline) frontend.backendRenderPipeline());
 		backend.vertexArray().bind(new GpuBufferSlice[] { quad.slice() });

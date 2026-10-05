@@ -327,7 +327,7 @@ public class CompositeRenderer {
 
 			// program is the identifier for composite :shrug:
 			this.customUniforms.push(compositePass.program);
-			GlStateManager._glBindBuffer(GL46C.GL_ELEMENT_ARRAY_BUFFER , ((GlBuffer) indices).handle);
+			if (!net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) GlStateManager._glBindBuffer(GL46C.GL_ELEMENT_ARRAY_BUFFER , ((GlBuffer) indices).handle);
 
 			GlStateManager._drawElements(GL46C.GL_TRIANGLES, 6, GlConst.toGl(type), 0);
 

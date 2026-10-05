@@ -132,7 +132,9 @@ public class Iris {
 			return;
 		}
 
-		if (GL.getCapabilities().GL_KHR_parallel_shader_compile) {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			// MineMetal: no OpenGL context; shaders are translated to Metal by MineMetal.
+		} else if (GL.getCapabilities().GL_KHR_parallel_shader_compile) {
 			KHRParallelShaderCompile.glMaxShaderCompilerThreadsKHR(10);
 		} else if (GL.getCapabilities().GL_ARB_parallel_shader_compile) {
 			ARBParallelShaderCompile.glMaxShaderCompilerThreadsARB(10);
@@ -429,7 +431,7 @@ public class Iris {
 			success = GLDebug.setupDebugMessageCallback();
 		} else {
 			GLDebug.reloadDebugState();
-			GlDebug.enableDebugCallback(Minecraft.getInstance().options.glDebugVerbosity, false, new HashSet<>((IrisRenderSystem.getGlDevice()).getDeviceInfo().underlyingExtensions()));
+			if (!net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) GlDebug.enableDebugCallback(Minecraft.getInstance().options.glDebugVerbosity, false, new HashSet<>((IrisRenderSystem.getGlDevice()).getDeviceInfo().underlyingExtensions()));
 			success = 1;
 		}
 

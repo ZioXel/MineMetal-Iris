@@ -64,6 +64,8 @@ dependencies {
     compileOnly("org.anarres:jcpp:1.4.14")
 
     compileOnly(files(rootDir.resolve("DHApi.jar")))
+    // MineMetal: the facades in net.irisshaders.iris.metal call into MineMetal's GL emulation (build MineMetal first: ./mm.sh build)
+    compileOnly(files(rootDir.resolve("../MineMetal/build/libs/minemetal-0.1.0.jar")))
 }
 
 afterEvaluate {

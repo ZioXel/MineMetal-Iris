@@ -13,6 +13,9 @@ import org.lwjgl.system.MemoryUtil;
 
 public interface DepthCopyStrategy {
 	static DepthCopyStrategy fastest(boolean combinedStencilRequired) {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			return new Gl43CopyImage(); // MineMetal: texture-to-texture blit copy
+		}
 		// Check whether glCopyImageSubData is available by checking the function directly...
 		// Gl.getCapabilities().OpenGL43 can be false even if OpenGL 4.3 functions are supported,
 		// because Minecraft requests an OpenGL 3.2 forward compatible function.
