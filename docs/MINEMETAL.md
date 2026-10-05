@@ -59,3 +59,15 @@ Then stage 3 (shadow pass) and stage 4 (compute / image load-store / SSBOs via n
 
 Iteration loop: `cd ../MineMetal && ./mm.sh iris` (builds MineMetal + this fork, runs on Metal); logs in
 `MineMetal/.reference/run.log` and `iris-build.log`.
+
+### Status (2026-10-05, later)
+
+Stage 2 works: BSL's gbuffer programs draw terrain (Sodium), sky, clouds, entities, items, particles and the hand on
+Metal at ~90 fps on an M2 (MineMetal override pipelines + GL emulation). Reversed Z stays native (Iris' shader depth
+transforms handle it, as on Vulkan). Key fixes on the way: unique uniform-block/sampler bindings before SPIRV-Cross
+(aliasing broke entity transforms), GL-style persistent UBO binding points, int/uint attribute signedness, default
+values for missing vertex attributes. Debug switches (MineMetal): -Dminemetal.debugSolid / debugNoDepth /
+debugEntityFormat / debugVertices = <pipeline substring>, -Dminemetal.traceFrame=true.
+
+Next: stage 3 – the shadow pass (ShadowRenderer on Metal: shadow programs, shadow render targets, depth flip for the
+shadow projection), then stage 4 (compute, image load/store, SSBOs).
