@@ -1,3 +1,28 @@
+# MineMetal-Iris
+
+A fork of [Iris](https://github.com/IrisShaders/Iris) (branch **`metal`**) that runs **shader packs on Apple Metal**
+together with [MineMetal](https://github.com/ZioXel/MineMetal), a native Metal backend for Minecraft 26.3.
+
+> ⚠️ Experimental. Needs MineMetal; on regular OpenGL it behaves like upstream Iris.
+
+**How it works:** every OpenGL call Iris makes goes through generated facade classes (`net.irisshaders.iris.metal.gl`).
+On OpenGL they call LWJGL as usual; on Metal they go to MineMetal's GL emulation. Iris' world shaders become
+MineMetal *override pipelines* that draw into the pack's render targets inside Minecraft's Metal render passes.
+Metal-specific changes are marked `MetalGlBridge.isMetal()` and documented in [docs/MINEMETAL.md](docs/MINEMETAL.md).
+
+| | |
+|---|---|
+| Post-processing (deferred / composite / final) | ✅ |
+| World shaders (terrain via Sodium, entities, particles, sky, hand) | ✅ BSL at ~90 fps on an M2 |
+| Shadows | 🚧 next |
+| Compute, image load-store, SSBOs | ⏳ later |
+
+**Build:** clone next to MineMetal, build MineMetal first, then `./metal.sh build` (or just run `../MineMetal/mm.sh iris`).
+
+---
+
+*Original Iris README below. Iris is licensed under the LGPL-3.0; so is this fork.*
+
 ![Iris: An open-source shaders mod compatible with OptiFine shader packs](docs/banner.png)
 
 # Iris
