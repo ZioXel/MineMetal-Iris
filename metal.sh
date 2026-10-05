@@ -7,7 +7,7 @@ LOG=../MineMetal/.reference/iris-build.log
 case "${1:-build}" in
   build)
     ./gradlew :fabric:build -x test 2>&1 | tee "$LOG" || { echo "BUILD FAILED (log: $LOG)"; exit 1; }
-    jar=$(ls -t fabric/build/libs/iris-fabric-*.jar | grep -v -- '-sources' | head -1)
+    jar=$(ls -t build/libs/iris-fabric-*.jar fabric/build/libs/iris-fabric-*.jar 2>/dev/null | grep -v -- -sources | head -1); [ -n "$jar" ] || { echo "no iris jar found"; exit 1; }
     dest=../MineMetal/run/mods-stage0
     mkdir -p ../MineMetal/run/iris-upstream
     for old in "$dest"/iris-fabric-*.jar; do [ -e "$old" ] && mv "$old" ../MineMetal/run/iris-upstream/; done
