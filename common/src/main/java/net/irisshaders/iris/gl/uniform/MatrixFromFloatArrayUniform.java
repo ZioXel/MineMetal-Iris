@@ -1,9 +1,9 @@
 package net.irisshaders.iris.gl.uniform;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL46C;
 
 import java.nio.FloatBuffer;
 import java.util.Arrays;

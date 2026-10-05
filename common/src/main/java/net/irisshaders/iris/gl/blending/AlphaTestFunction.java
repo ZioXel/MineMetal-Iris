@@ -1,6 +1,6 @@
 package net.irisshaders.iris.gl.blending;
 
-import org.lwjgl.opengl.GL11;
+import net.irisshaders.iris.metal.gl.GL11;
 
 import java.util.Optional;
 

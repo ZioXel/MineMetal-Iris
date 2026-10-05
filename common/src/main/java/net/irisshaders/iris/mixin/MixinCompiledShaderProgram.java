@@ -14,7 +14,7 @@ import net.irisshaders.iris.pipeline.programs.IrisProgram;
 import net.irisshaders.iris.shadows.ShadowRenderer;
 import net.irisshaders.iris.vertices.ImmediateState;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.opengl.GL31C;
+import net.irisshaders.iris.metal.gl.GL31C;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

@@ -1,6 +1,6 @@
 package net.irisshaders.iris.gl.blending;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.irisshaders.iris.mixin.GlStateManagerAccessor;
 

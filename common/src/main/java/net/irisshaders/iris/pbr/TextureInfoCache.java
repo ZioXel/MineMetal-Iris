@@ -1,11 +1,11 @@
 package net.irisshaders.iris.pbr;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.irisshaders.iris.mixin.GlStateManagerAccessor;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL20C;
+import net.irisshaders.iris.metal.gl.GL20C;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

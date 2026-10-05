@@ -1,6 +1,6 @@
 package net.irisshaders.iris.pipeline;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -29,7 +29,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.Identifier;
 import org.apache.commons.io.FilenameUtils;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL46C;
 
 import java.io.IOException;
 import java.util.ArrayList;

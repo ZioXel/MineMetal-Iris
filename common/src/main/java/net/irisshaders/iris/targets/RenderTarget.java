@@ -1,6 +1,6 @@
 package net.irisshaders.iris.targets;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.irisshaders.iris.gl.sampler.GlSampler;
@@ -8,9 +8,9 @@ import net.irisshaders.iris.gl.texture.InternalTextureFormat;
 import net.irisshaders.iris.gl.texture.PixelFormat;
 import net.irisshaders.iris.gl.texture.PixelType;
 import org.joml.Vector2i;
-import org.lwjgl.opengl.GL11C;
-import org.lwjgl.opengl.GL13C;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL11C;
+import net.irisshaders.iris.metal.gl.GL13C;
+import net.irisshaders.iris.metal.gl.GL43C;
 
 import java.nio.ByteBuffer;
 

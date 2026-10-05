@@ -1,11 +1,11 @@
 package net.irisshaders.iris.gl.buffer;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.irisshaders.iris.gl.sampler.SamplerLimits;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL43C;
 
 import java.util.ArrayList;
 import java.util.Collections;

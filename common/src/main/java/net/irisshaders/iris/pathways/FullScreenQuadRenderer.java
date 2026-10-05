@@ -6,7 +6,7 @@ import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.renderpearl.backend.opengl.GlBuffer;
 import com.mojang.renderpearl.backend.opengl.GlDevice;
 import com.mojang.renderpearl.backend.opengl.GlRenderPipeline;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
@@ -19,8 +19,8 @@ import net.irisshaders.iris.helpers.VertexBufferHelper;
 import net.irisshaders.iris.mixin.GpuDeviceAccessor;
 import net.irisshaders.iris.mixinterface.GlRenderPipelineAccess;
 import net.irisshaders.iris.pipeline.CompositeRenderer;
-import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL32;
+import net.irisshaders.iris.metal.gl.GL46C;
 
 /**
  * Renders a full-screen textured quad to the screen. Used in composite / deferred rendering.

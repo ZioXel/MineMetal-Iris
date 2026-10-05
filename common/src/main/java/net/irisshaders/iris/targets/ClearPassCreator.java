@@ -1,7 +1,7 @@
 package net.irisshaders.iris.targets;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.irisshaders.iris.shaderpack.properties.PackRenderTargetDirectives;
@@ -9,7 +9,7 @@ import net.irisshaders.iris.shaderpack.properties.PackShadowDirectives;
 import net.irisshaders.iris.shadows.ShadowRenderTargets;
 import org.joml.Vector2i;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL21C;
+import net.irisshaders.iris.metal.gl.GL21C;
 
 import java.util.ArrayList;
 import java.util.HashMap;

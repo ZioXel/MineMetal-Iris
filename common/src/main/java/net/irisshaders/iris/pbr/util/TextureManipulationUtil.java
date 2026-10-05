@@ -1,10 +1,10 @@
 package net.irisshaders.iris.pbr.util;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
+import net.irisshaders.iris.metal.gl.GL11;
+import net.irisshaders.iris.metal.gl.GL30;
 
 public class TextureManipulationUtil {
 	private static int colorFillFBO = -1;

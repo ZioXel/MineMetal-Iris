@@ -19,7 +19,7 @@ import net.irisshaders.iris.pipeline.WorldRenderingPipeline;
 import net.irisshaders.iris.pipeline.programs.IrisProgram;
 import net.irisshaders.iris.shadows.ShadowRenderingState;
 import net.irisshaders.iris.vertices.ImmediateState;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL46C;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

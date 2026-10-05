@@ -1,13 +1,13 @@
 package net.irisshaders.iris.targets;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.GlResource;
 import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.irisshaders.iris.gl.texture.DepthBufferFormat;
-import org.lwjgl.opengl.GL11C;
-import org.lwjgl.opengl.GL13C;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL11C;
+import net.irisshaders.iris.metal.gl.GL13C;
+import net.irisshaders.iris.metal.gl.GL43C;
 
 public class DepthTexture extends GlResource {
 	public DepthTexture(String name, int width, int height, DepthBufferFormat format) {

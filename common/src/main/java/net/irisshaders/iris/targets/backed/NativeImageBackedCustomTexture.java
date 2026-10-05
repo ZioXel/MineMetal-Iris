@@ -8,8 +8,8 @@ import net.irisshaders.iris.gl.texture.TextureAccess;
 import net.irisshaders.iris.gl.texture.TextureType;
 import net.irisshaders.iris.shaderpack.texture.CustomTextureData;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import org.lwjgl.opengl.GL11C;
-import org.lwjgl.opengl.GL13C;
+import net.irisshaders.iris.metal.gl.GL11C;
+import net.irisshaders.iris.metal.gl.GL13C;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

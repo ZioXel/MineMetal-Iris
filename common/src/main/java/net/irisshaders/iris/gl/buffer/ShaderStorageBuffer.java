@@ -1,10 +1,10 @@
 package net.irisshaders.iris.gl.buffer;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.IrisRenderSystem;
-import org.lwjgl.opengl.GL43C;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL43C;
+import net.irisshaders.iris.metal.gl.GL46C;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.ByteBuffer;

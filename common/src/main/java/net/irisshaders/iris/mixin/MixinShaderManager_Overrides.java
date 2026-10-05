@@ -39,7 +39,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL33C;
+import net.irisshaders.iris.metal.gl.GL33C;
 
 import java.util.ArrayList;
 import java.lang.invoke.MethodHandle;

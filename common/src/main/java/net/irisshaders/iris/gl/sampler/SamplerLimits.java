@@ -1,9 +1,9 @@
 package net.irisshaders.iris.gl.sampler;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import net.irisshaders.iris.gl.IrisRenderSystem;
-import org.lwjgl.opengl.GL20C;
-import org.lwjgl.opengl.GL45C;
+import net.irisshaders.iris.metal.gl.GL20C;
+import net.irisshaders.iris.metal.gl.GL45C;
 
 public class SamplerLimits {
 	private static SamplerLimits instance;

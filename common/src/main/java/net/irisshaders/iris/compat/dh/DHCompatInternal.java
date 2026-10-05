@@ -1,6 +1,6 @@
 package net.irisshaders.iris.compat.dh;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.renderpearl.api.textures.GpuTexture;
 import com.seibel.distanthorizons.api.DhApi;
 import com.seibel.distanthorizons.api.interfaces.override.rendering.IDhApiFramebuffer;
@@ -19,7 +19,7 @@ import net.irisshaders.iris.targets.Blaze3dRenderTargetExt;
 import net.irisshaders.iris.targets.DepthTexture;
 import net.irisshaders.iris.uniforms.CapturedRenderingState;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.opengl.GL20C;
+import net.irisshaders.iris.metal.gl.GL20C;
 
 import java.io.IOException;
 

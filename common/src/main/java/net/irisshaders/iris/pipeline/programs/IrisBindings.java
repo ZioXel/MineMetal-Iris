@@ -1,8 +1,8 @@
 package net.irisshaders.iris.pipeline.programs;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
-import org.lwjgl.opengl.GL20C;
-import org.lwjgl.opengl.GL31C;
+import net.irisshaders.iris.metal.gl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GL20C;
+import net.irisshaders.iris.metal.gl.GL31C;
 
 public final class IrisBindings {
 	public static final int RESOURCE_COUNT = 32;

@@ -2,9 +2,9 @@
 
 package net.irisshaders.iris.gl.shader;
 
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL32C;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL20;
+import net.irisshaders.iris.metal.gl.GL32C;
+import net.irisshaders.iris.metal.gl.GL43C;
 
 /**
  * An enumeration over the supported OpenGL shader types.

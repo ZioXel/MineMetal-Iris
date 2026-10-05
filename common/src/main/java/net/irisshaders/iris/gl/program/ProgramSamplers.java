@@ -2,7 +2,7 @@ package net.irisshaders.iris.gl.program;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.irisshaders.iris.gl.IrisRenderSystem;
@@ -15,7 +15,7 @@ import net.irisshaders.iris.gl.texture.TextureAccess;
 import net.irisshaders.iris.gl.texture.TextureType;
 import net.irisshaders.iris.mixin.GlStateManagerAccessor;
 import net.irisshaders.iris.shaderpack.properties.PackRenderTargetDirectives;
-import org.lwjgl.opengl.GL20C;
+import net.irisshaders.iris.metal.gl.GL20C;
 
 import java.util.ArrayList;
 import java.util.List;

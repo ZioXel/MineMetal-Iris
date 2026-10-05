@@ -49,7 +49,7 @@ import net.minecraft.util.profiling.Profiler;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL43C;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

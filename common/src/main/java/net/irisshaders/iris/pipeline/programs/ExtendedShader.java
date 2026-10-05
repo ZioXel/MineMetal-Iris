@@ -1,7 +1,7 @@
 package net.irisshaders.iris.pipeline.programs;
 
 import com.mojang.renderpearl.backend.opengl.GlProgram;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.renderpearl.api.vertex.VertexFormat;
@@ -38,8 +38,8 @@ import net.minecraft.client.renderer.feature.ItemFeatureRenderer;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL43C;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL43C;
+import net.irisshaders.iris.metal.gl.GL46C;
 import org.slf4j.Logger;
 
 import java.io.IOException;

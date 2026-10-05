@@ -6,7 +6,7 @@ import com.mojang.renderpearl.backend.opengl.GlTexture;
 import com.mojang.renderpearl.api.textures.GpuTexture;
 import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.irisshaders.iris.mixinterface.GpuTextureInterface;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL46C;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

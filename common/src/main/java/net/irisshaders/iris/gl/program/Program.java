@@ -1,9 +1,9 @@
 package net.irisshaders.iris.gl.program;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import net.irisshaders.iris.gl.GlResource;
 import net.irisshaders.iris.gl.IrisRenderSystem;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL43C;
 
 public final class Program extends GlResource {
 	private final ProgramUniforms uniforms;

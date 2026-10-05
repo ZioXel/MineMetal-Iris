@@ -1,6 +1,6 @@
 package net.irisshaders.iris.gl.image;
 
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import net.irisshaders.iris.gl.GLDebug;
 import net.irisshaders.iris.gl.GlResource;
 import net.irisshaders.iris.gl.IrisRenderSystem;
@@ -9,11 +9,11 @@ import net.irisshaders.iris.gl.texture.PixelFormat;
 import net.irisshaders.iris.gl.texture.PixelType;
 import net.irisshaders.iris.gl.texture.TextureType;
 import org.lwjgl.opengl.ARBClearTexture;
-import org.lwjgl.opengl.GL11C;
-import org.lwjgl.opengl.GL13C;
-import org.lwjgl.opengl.GL20C;
-import org.lwjgl.opengl.GL30C;
-import org.lwjgl.opengl.GL43C;
+import net.irisshaders.iris.metal.gl.GL11C;
+import net.irisshaders.iris.metal.gl.GL13C;
+import net.irisshaders.iris.metal.gl.GL20C;
+import net.irisshaders.iris.metal.gl.GL30C;
+import net.irisshaders.iris.metal.gl.GL43C;
 
 public class GlImage extends GlResource {
 	protected final String name;

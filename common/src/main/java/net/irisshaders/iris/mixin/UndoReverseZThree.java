@@ -4,7 +4,7 @@ import com.mojang.renderpearl.backend.opengl.GlConst;
 import com.mojang.renderpearl.api.pipeline.CompareOp;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.vertices.ImmediateState;
-import org.lwjgl.opengl.GL43;
+import net.irisshaders.iris.metal.gl.GL43;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

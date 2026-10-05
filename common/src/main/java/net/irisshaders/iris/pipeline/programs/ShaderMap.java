@@ -1,10 +1,10 @@
 package net.irisshaders.iris.pipeline.programs;
 
 import com.mojang.renderpearl.backend.opengl.GlProgram;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import it.unimi.dsi.fastutil.objects.Object2BooleanFunction;
 import net.irisshaders.iris.gl.shader.ShaderCompileException;
-import org.lwjgl.opengl.GL46C;
+import net.irisshaders.iris.metal.gl.GL46C;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

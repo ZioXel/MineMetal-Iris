@@ -3,7 +3,7 @@ package net.irisshaders.iris.pathways;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
 import com.mojang.renderpearl.api.buffers.GpuBuffer;
-import com.mojang.renderpearl.backend.opengl.GlStateManager;
+import net.irisshaders.iris.metal.gl.GlStateManager;
 import com.mojang.renderpearl.api.commands.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.renderpearl.api.vertex.VertexFormat;
@@ -25,7 +25,7 @@ import net.irisshaders.iris.uniforms.SystemTimeUniforms;
 import net.minecraft.client.Minecraft;
 import org.apache.commons.io.IOUtils;
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL21C;
+import net.irisshaders.iris.metal.gl.GL21C;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
