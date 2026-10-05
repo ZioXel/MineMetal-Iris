@@ -9,9 +9,9 @@ case "${1:-build}" in
     ./gradlew :fabric:build -x test 2>&1 | tee "$LOG" || { echo "BUILD FAILED (log: $LOG)"; exit 1; }
     jar=$(ls -t fabric/build/libs/iris-fabric-*.jar | grep -v -- '-sources' | head -1)
     dest=../MineMetal/run/mods-stage0
-    mkdir -p "$dest/upstream"
-    for old in "$dest"/iris-fabric-*.jar; do [ -e "$old" ] && mv "$old" "$dest/upstream/"; done
+    mkdir -p ../MineMetal/run/iris-upstream
+    for old in "$dest"/iris-fabric-*.jar; do [ -e "$old" ] && mv "$old" ../MineMetal/run/iris-upstream/; done
     cp "$jar" "$dest/"
-    echo "== installed $(basename "$jar") into $dest (original Iris moved to $dest/upstream)" | tee -a "$LOG" ;;
+    echo "== installed $(basename "$jar") into $dest (original Iris moved to run/iris-upstream)" | tee -a "$LOG" ;;
   *) echo "usage: ./metal.sh build"; exit 2 ;;
 esac
