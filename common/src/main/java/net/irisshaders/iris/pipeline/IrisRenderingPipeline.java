@@ -233,8 +233,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 		this.occlusionCulling = programSet.getPackDirectives().shouldUseOcclusionCulling();
 		this.resolver = new ProgramFallbackResolver(programSet);
 		this.pack = programSet.getPack();
-        // MineMetal stage 1: vanilla (Metal) pipelines draw the world, so keep Sodium's compact vertex format there.
-        WorldRenderingSettings.INSTANCE.setVertexFormat(net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal() ? net.caffeinemc.mods.sodium.client.render.chunk.vertex.format.ChunkMeshFormats.COMPACT :
+        WorldRenderingSettings.INSTANCE.setVertexFormat(
                 FormatAnalyzer.createFormat(true, true, true, true)); // TODO 26.2... or never.
 
 		RenderTarget main = Minecraft.getInstance().gameRenderer.mainRenderTarget();
@@ -412,8 +411,8 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 
 
 		ShaderLoadingMap loadingMap = new ShaderLoadingMap((key, patchType) -> {
-			if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
-				// MineMetal stage 1: the world is drawn by the vanilla Metal pipelines; gbuffer/shadow programs come later.
+			if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal() && key.isShadow()) {
+				// MineMetal stage 2: gbuffer programs run on Metal; the shadow pass comes later.
 				return null;
 			}
 			try {
@@ -1095,9 +1094,6 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 	public void finalizeLevelRendering() {
 		isRenderingWorld = false;
 		removePhaseIfNeeded();
-		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
-			net.irisshaders.iris.metal.MetalIris.copyMainColorToColortex0(renderTargets);
-		}
 		compositeRenderer.renderAll();
 		finalPassRenderer.renderFinalPass();
 	}

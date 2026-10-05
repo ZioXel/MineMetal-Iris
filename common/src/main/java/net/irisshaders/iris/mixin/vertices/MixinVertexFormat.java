@@ -37,7 +37,7 @@ public abstract class MixinVertexFormat implements VertexFormatExtension {
 
 		for (VertexFormatElement x : this.getElements()) {
 			var string = x.name();
-			GlStateManager._glBindAttribLocation(i, j, ATTRIBUTE_LIST.contains(string) && !isFallback ? "iris_" + string : string);
+			net.irisshaders.iris.metal.gl.GlStateManager._glBindAttribLocation(i, j, ATTRIBUTE_LIST.contains(string) && !isFallback ? "iris_" + string : string);
 			j++;
 		}
 	}

@@ -28,7 +28,7 @@ import java.util.Optional;
 public class MixinRenderPipeline {
 	@Inject(method = "getVertexFormatBinding", at = @At("RETURN"), cancellable = true)
 	private void iris$change(CallbackInfoReturnable<VertexFormat> cir) {
-		if (Iris.isPackInUseQuick() && !net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal() && Thread.currentThread().getName().contains("Render") && ImmediateState.isRenderingLevel && !ImmediateState.skipExtension.get()) {
+		if (Iris.isPackInUseQuick() && Thread.currentThread().getName().contains("Render") && ImmediateState.isRenderingLevel && !ImmediateState.skipExtension.get()) {
 			VertexFormat vf = cir.getReturnValue();
 			RenderPipeline thiss = (RenderPipeline) (Object) this;
 			if (Objects.equals(vf, DefaultVertexFormat.BLOCK)) {
@@ -48,7 +48,7 @@ public class MixinRenderPipeline {
 	}
 	@Inject(method = "getVertexFormatBindings", at = @At("RETURN"), cancellable = true)
 	private void iris$change2(CallbackInfoReturnable<List<VertexFormat>> cir) {
-		if (Iris.isPackInUseQuick() && !net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal() && Thread.currentThread().getName().contains("Render") && ImmediateState.isRenderingLevel && !ImmediateState.skipExtension.get()) {
+		if (Iris.isPackInUseQuick() && Thread.currentThread().getName().contains("Render") && ImmediateState.isRenderingLevel && !ImmediateState.skipExtension.get()) {
 			VertexFormat vf = cir.getReturnValue().get(0);
 			RenderPipeline thiss = (RenderPipeline) (Object) this;
 			if (Objects.equals(vf, DefaultVertexFormat.BLOCK)) {
