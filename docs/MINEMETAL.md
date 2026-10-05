@@ -43,3 +43,19 @@ When MineMetal's Metal backend is active (`MetalGlBridge.isMetal()`), the fork:
 - copies the main color target into `colortex0` before the composite passes so deferred/composite/final have a scene.
 
 Build order: `cd ../MineMetal && ./mm.sh build`, then `./metal.sh build`, then `cd ../MineMetal && ./mm.sh run -PirisMetal`.
+
+### Status (2026-10-05)
+
+Stage 1 works on an M2: BSL's deferred/composite/final passes run on Metal at 60 fps (vsync). Expected for now:
+washed-out image (passes run on an already-lit vanilla image, reversed-Z depth so no fog) and no shadows.
+
+Next – stage 2 (gbuffers): let ShaderMap build the pack's gbuffer programs on Metal and make the world draw with them:
+1. ExtendedShader/FallbackShader extend Mojang's GlProgram – need a Metal-side equivalent (a renderpearl pipeline
+   whose shaders are the Iris-patched GLSL, compiled through MineMetal's GLSL→SPIR-V→MSL path).
+2. Re-enable the extended vertex formats (IrisVertexFormats.TERRAIN etc.) once those pipelines consume them.
+3. Undo reversed-Z on Metal too (flip clears + depth compare ops in MineMetal while a pack is active).
+4. Drop the colortex0 copy in MetalIris once gbuffers write the scene.
+Then stage 3 (shadow pass) and stage 4 (compute / image load-store / SSBOs via native Metal compute).
+
+Iteration loop: `cd ../MineMetal && ./mm.sh iris` (builds MineMetal + this fork, runs on Metal); logs in
+`MineMetal/.reference/run.log` and `iris-build.log`.
