@@ -101,7 +101,7 @@ public abstract class MixinBufferBuilder implements VertexConsumer, BlockSensiti
 	private VertexFormat iris$extendFormat(VertexFormat format) {
 		injectNormalAndUV1 = false;
 
-		if (ImmediateState.skipExtension.get() || !ImmediateState.isRenderingLevel || !Iris.isPackInUseQuick()) {
+		if (ImmediateState.skipExtension.get() || !ImmediateState.isRenderingLevel || !Iris.isPackInUseQuick() || net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
 			return format;
 		}
 

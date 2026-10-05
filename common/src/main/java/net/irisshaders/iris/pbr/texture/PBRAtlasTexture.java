@@ -150,7 +150,7 @@ public class PBRAtlasTexture extends AbstractTexture implements PBRDumpable {
 		this.maxMipLevel = k;
 		this.mipLevelCount = k + 1;
 		this.mipViews = new GpuTextureView[this.mipLevelCount];
-		TextureManipulationUtil.fillWithColor((((GlTexture) texture)).glId(), maxMipLevel, type.getDefaultValue());
+		if (!net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) TextureManipulationUtil.fillWithColor((((GlTexture) texture)).glId(), maxMipLevel, type.getDefaultValue());
 
 		for (int l = 0; l <= this.maxMipLevel; l++) {
 			this.mipViews[l] = gpuDevice.createTextureView(this.texture, l, 1);

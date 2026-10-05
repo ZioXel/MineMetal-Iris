@@ -95,6 +95,15 @@ public class CenterDepthSampler {
 		BlendModeOverride.restore();
 
 		IrisRenderSystem.disableBlend();
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			this.framebuffer.bind();
+			this.program.use();
+			GlStateManager._viewport(0, 0, 1, 1);
+			net.irisshaders.iris.metal.MetalIris.drawFullscreenPass(1, 1, false);
+			ProgramUniforms.clearActiveUniforms();
+			ProgramSamplers.clearActiveSamplers();
+			BlendModeOverride.restore();
+		} else
 		try (RenderPass renderPass = RenderSystem.getDevice().createCommandEncoder().createRenderPass(() -> "centerDepthSmooth sampler", Minecraft.getInstance().gameRenderer.mainRenderTarget().getColorTextureView(), Optional.empty())) {
 			renderPass.setPipeline(RenderSystem.getCompiledPipeline(CompositeRenderer.COMPOSITE_PIPELINE));
 			renderPass.setIndexBuffer(indices, type);

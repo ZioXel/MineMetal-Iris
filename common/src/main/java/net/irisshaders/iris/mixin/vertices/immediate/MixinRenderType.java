@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinRenderType {
 	@Inject(method = "format", at = @At("RETURN"), cancellable = true)
 	private void iris$change(CallbackInfoReturnable<VertexFormat> cir) {
-		if (Iris.isPackInUseQuick() && ImmediateState.renderWithExtendedVertexFormat && ImmediateState.isRenderingLevel) {
+		if (Iris.isPackInUseQuick() && !net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal() && ImmediateState.renderWithExtendedVertexFormat && ImmediateState.isRenderingLevel) {
 			VertexFormat vf = cir.getReturnValue();
 			RenderType thiss = (RenderType) (Object) this;
 			if (vf.equals(DefaultVertexFormat.BLOCK)) {
