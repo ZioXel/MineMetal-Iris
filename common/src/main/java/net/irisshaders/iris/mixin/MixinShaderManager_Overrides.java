@@ -72,11 +72,28 @@ public abstract class MixinShaderManager_Overrides {
 
 		WorldRenderingPipeline pipeline = Iris.getPipelineManager().getPipelineNullable();
 
-		if (pipeline instanceof IrisRenderingPipeline irisPipeline && irisPipeline.shouldOverrideShaders() && !ImmediateState.bypass && !net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+		if (pipeline instanceof IrisRenderingPipeline irisPipeline && irisPipeline.shouldOverrideShaders() && !ImmediateState.bypass) {
 			RenderPipeline newProgram = renderPipeline;
 
 			ShaderKey shaderKey = IrisPipelines.getPipeline(irisPipeline, newProgram);
 			GlProgram program = shaderKey == null ? null : irisPipeline.getShaderMap().getShader(shaderKey);
+
+			if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+				// MineMetal: same override, but the replacement pipeline draws the GL program through MineMetal's emulation.
+				if (program != null && cir.getReturnValue() instanceof FrontendRenderPipeline originalM) {
+					List<VertexFormat> formatsM = new ArrayList<>(renderPipeline.getVertexFormatBindings());
+					Map<List<VertexFormat>, FrontendRenderPipeline> byFormat = iris$overrides
+						.computeIfAbsent(originalM, unused -> new IdentityHashMap<>())
+						.computeIfAbsent(program, unused -> new HashMap<>());
+					FrontendRenderPipeline replacementM = byFormat.get(formatsM);
+					if (replacementM == null) {
+						replacementM = net.irisshaders.iris.metal.MetalIris.overridePipeline(originalM, program, formatsM);
+						byFormat.put(formatsM, replacementM);
+					}
+					cir.setReturnValue(replacementM);
+				}
+				return;
+			}
 
 			var oldProgram = (GlRenderPipeline) ((FrontendRenderPipeline) cir.getReturnValue()).backendRenderPipeline();
 

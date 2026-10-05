@@ -5,8 +5,15 @@ import dev.minemetal.client.glcompat.MetalGL;
 import net.irisshaders.iris.gl.IrisRenderSystem;
 import net.irisshaders.iris.gl.blending.BlendModeOverride;
 import net.irisshaders.iris.metal.gl.GlStateManager;
-import net.irisshaders.iris.targets.RenderTarget;
-import net.irisshaders.iris.targets.RenderTargets;
+import com.mojang.renderpearl.api.pipeline.BindGroupLayout;
+import com.mojang.renderpearl.api.vertex.VertexFormat;
+import com.mojang.renderpearl.backend.opengl.GlProgram;
+import com.mojang.renderpearl.frontend.FrontendRenderPipeline;
+import dev.minemetal.client.glcompat.GlOverridePipeline;
+import net.irisshaders.iris.pipeline.programs.IrisBindings;
+import net.irisshaders.iris.pipeline.programs.IrisProgram;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL30C;
@@ -48,17 +55,57 @@ public final class MetalIris {
 	}
 
 	/**
-	 * Stage 1 of the Metal port: the world is still drawn by the vanilla (Metal) pipelines into Minecraft's main
-	 * target, not by the pack's gbuffer programs. Copy it into colortex0 (main and alt) so the pack's
-	 * deferred/composite/final passes have the scene to work with.
+	 * Metal replacement for the GL override pipeline Iris builds in MixinShaderManager_Overrides: draws with the Iris
+	 * program through MineMetal's GL emulation, using the original pipeline's state and the same GL binding points
+	 * Iris uses on OpenGL (see IrisBindings / MixinGlProgram).
 	 */
-	public static void copyMainColorToColortex0(RenderTargets targets) {
-		if (targets.getRenderTargetCount() == 0) {
-			return;
-		}
-		RenderTarget colortex0 = targets.getOrCreate(0);
-		int main = glId(Minecraft.getInstance().gameRenderer.mainRenderTarget().getColorTexture());
-		MetalGL.blitColor(main, colortex0.getMainTexture());
-		MetalGL.blitColor(main, colortex0.getAltTexture());
+	public static FrontendRenderPipeline overridePipeline(FrontendRenderPipeline original, GlProgram program, List<VertexFormat> formats) {
+		IrisProgram irisProgram = (IrisProgram) program;
+		List<BindGroupLayout.UniformDescription> uniforms = original.uniforms();
+		GlOverridePipeline.Hooks hooks = new GlOverridePipeline.Hooks() {
+			@Override
+			public void setupState() {
+				irisProgram.iris$setupState(uniforms);
+			}
+
+			@Override
+			public void clearState() {
+				irisProgram.iris$clearState();
+			}
+
+			@Override
+			public int uniformBinding(String name) {
+				return switch (name) {
+					case "DynamicTransforms", "TerrainUniform" -> IrisBindings.DYNAMIC_TRANSFORMS;
+					case "CloudInfo" -> IrisBindings.CLOUD_INFO;
+					case "Projection" -> IrisBindings.PROJECTION;
+					case "Globals" -> IrisBindings.GLOBALS;
+					case "Fog" -> IrisBindings.FOG;
+					case "Lighting" -> IrisBindings.LIGHTING;
+					case "u_Globals" -> IrisBindings.SODIUM_GLOBALS;
+					default -> -1;
+				};
+			}
+
+			@Override
+			public int samplerBinding(String name) {
+				return switch (name) {
+					case "Sampler0", "u_BlockTex" -> IrisBindings.ALBEDO_TEXTURE;
+					case "Sampler1" -> IrisBindings.OVERLAY_TEXTURE;
+					case "Sampler2", "u_LightTex" -> IrisBindings.LIGHTMAP_TEXTURE;
+					case "CloudFaces", "u_SectionTimeInfo" -> IrisBindings.AUX_TEXTURE;
+					default -> -1;
+				};
+			}
+
+			@Override
+			public int pushConstantBinding() {
+				return IrisBindings.PUSH_CONSTANTS;
+			}
+		};
+		List<VertexFormat> vertexFormats = new ArrayList<>(formats);
+		GlOverridePipeline backend = new GlOverridePipeline(original.backendRenderPipeline(), program.getProgramId(), vertexFormats, hooks);
+		return new FrontendRenderPipeline(original.name(), backend, formats, original.uniformIndices(), original.uniforms(),
+			original.colorTargetStates(), original.wantsDepthTexture(), original.pushConstantSize());
 	}
 }

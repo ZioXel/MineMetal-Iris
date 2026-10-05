@@ -26,6 +26,9 @@ public class MixinGlProgram implements GlProgramBindings {
 	private List<Uniform> uniforms;
 	@Shadow
 	private Uniform.Ubo pushConstant;
+	@Shadow
+	@Final
+	private int programId;
 
 	@Unique
 	private final Map<String, Uniform.Utb> iris$textureBuffers = new HashMap<>();
@@ -33,13 +36,24 @@ public class MixinGlProgram implements GlProgramBindings {
 	@Inject(method = "setupBindGroupLayouts", at = @At("HEAD"), cancellable = true)
 	private void iris$setupInitialBindings(List<BindGroupLayout.UniformDescription> descriptions, CallbackInfo ci) {
 		if ((Object) this instanceof IrisProgram) {
-			iris$setupBindings(descriptions, 0);
+			if (!net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) { // MineMetal binds resources itself (GlOverridePipeline); GL Uniform objects would need a GL context
+				iris$setupBindings(descriptions, 0);
+			}
+			ci.cancel();
+		}
+	}
+
+	@Inject(method = "close", at = @At("HEAD"), cancellable = true)
+	private void iris$closeOnMetal(CallbackInfo ci) {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			net.irisshaders.iris.metal.gl.GlStateManager.glDeleteProgram(this.programId);
 			ci.cancel();
 		}
 	}
 
 	@Override
 	public void iris$setupBindings(List<BindGroupLayout.UniformDescription> descriptions, int pushConstantsSize) {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return;
 		this.pushConstant = pushConstantsSize > 0 ? new Uniform.Ubo(IrisBindings.PUSH_CONSTANTS) : null;
 
 		while (this.uniforms.size() < Math.max(descriptions.size(), IrisBindings.RESOURCE_COUNT)) {
