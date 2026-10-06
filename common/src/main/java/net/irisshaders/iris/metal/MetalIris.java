@@ -26,6 +26,11 @@ public final class MetalIris {
 	private MetalIris() {
 	}
 
+	static {
+		// The shadow pass draws through renderpearl passes on the main target; only Iris' shadow programs may draw then.
+		dev.minemetal.client.metal.MetalRenderPass.setSkipVanillaDraws(net.irisshaders.iris.shadows.ShadowRenderingState::areShadowsCurrentlyBeingRendered);
+	}
+
 	/** GL name of a renderpearl texture inside MineMetal's GL emulation. */
 	public static int glId(GpuTexture texture) {
 		return MetalGL.registerExternalTexture(texture);
@@ -51,6 +56,15 @@ public final class MetalIris {
 		if (setViewport) {
 			GlStateManager._viewport(0, 0, viewportWidth, viewportHeight);
 		}
+		MetalGL.drawFullscreenQuad();
+	}
+
+	/** Like {@link #drawFullscreenPass} but keeps the blend state the caller set up (shadow composites). */
+	public static void drawFullscreenQuadKeepBlend() {
+		GlStateManager._disableScissorTest();
+		GlStateManager._disableDepthTest();
+		GlStateManager._depthMask(false);
+		GlStateManager._colorMask(15);
 		MetalGL.drawFullscreenQuad();
 	}
 
@@ -101,6 +115,11 @@ public final class MetalIris {
 			@Override
 			public int pushConstantBinding() {
 				return IrisBindings.PUSH_CONSTANTS;
+			}
+
+			@Override
+			public boolean shadowPass() {
+				return net.irisshaders.iris.shadows.ShadowRenderingState.areShadowsCurrentlyBeingRendered();
 			}
 		};
 		List<VertexFormat> vertexFormats = new ArrayList<>(formats);
