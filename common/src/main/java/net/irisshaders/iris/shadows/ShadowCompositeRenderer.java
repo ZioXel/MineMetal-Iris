@@ -195,10 +195,14 @@ public class ShadowCompositeRenderer {
 		GpuBuffer indices = RenderSystem.getSequentialBuffer(PrimitiveTopology.QUADS).getBuffer(6);
 		com.mojang.renderpearl.api.pipeline.IndexType type = RenderSystem.getSequentialBuffer(PrimitiveTopology.QUADS).type();
 
-		try (RenderPass pass = RenderSystem.getDevice().createCommandEncoder().createRenderPass(() -> "Shadow composites", Minecraft.getInstance().gameRenderer.mainRenderTarget().getColorTextureView(), Optional.empty())) {
-			pass.setPipeline(RenderSystem.getCompiledPipeline(CompositeRenderer.COMPOSITE_PIPELINE));
-			pass.setVertexBuffer(0, FullScreenQuadRenderer.INSTANCE.getQuad().slice());
-			pass.setIndexBuffer(indices, type);
+		// MineMetal: on Metal the passes are plain GL draws through MineMetal's emulation (no renderpearl pass).
+		final boolean metal = net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal();
+		try (RenderPass pass = metal ? null : RenderSystem.getDevice().createCommandEncoder().createRenderPass(() -> "Shadow composites", Minecraft.getInstance().gameRenderer.mainRenderTarget().getColorTextureView(), Optional.empty())) {
+			if (!metal) {
+				pass.setPipeline(RenderSystem.getCompiledPipeline(CompositeRenderer.COMPOSITE_PIPELINE));
+				pass.setVertexBuffer(0, FullScreenQuadRenderer.INSTANCE.getQuad().slice());
+				pass.setIndexBuffer(indices, type);
+			}
 
 			for (Pass renderPass : passes) {
 				boolean ranCompute = false;
@@ -230,7 +234,7 @@ public class ShadowCompositeRenderer {
 					}
 				}
 
-				pass.iris$setCustomPass(renderPass);
+				if (!metal) pass.iris$setCustomPass(renderPass);
 
 				float scaledWidth = renderTargets.getResolution() * renderPass.viewportScale.scale();
 				float scaledHeight = renderTargets.getResolution() * renderPass.viewportScale.scale();
@@ -245,7 +249,12 @@ public class ShadowCompositeRenderer {
 
 				this.customUniforms.push(renderPass.program);
 
-				pass.drawIndexed(6, 1, 0, 0, 0);
+				if (metal) {
+					renderPass.setupState();
+					net.irisshaders.iris.metal.MetalIris.drawFullscreenQuadKeepBlend();
+				} else {
+					pass.drawIndexed(6, 1, 0, 0, 0);
+				}
 				BlendModeOverride.restore();
 			}
 		}

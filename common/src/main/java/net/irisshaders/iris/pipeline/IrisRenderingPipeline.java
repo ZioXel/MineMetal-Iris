@@ -323,7 +323,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 			return shadowRenderTargets;
 		};
 
-		if (shadowDirectives.isShadowEnabled() == OptionalBoolean.TRUE && !net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+		if (shadowDirectives.isShadowEnabled() == OptionalBoolean.TRUE) {
 			shadowTargetsSupplier.get();
 		}
 
@@ -411,10 +411,6 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 
 
 		ShaderLoadingMap loadingMap = new ShaderLoadingMap((key, patchType) -> {
-			if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal() && key.isShadow()) {
-				// MineMetal stage 2: gbuffer programs run on Metal; the shadow pass comes later.
-				return null;
-			}
 			try {
 				if (key.isShadow()) {
 					return createShadowShader(key.getName(), resolver.resolve(key.getProgram()), key, patchType);
@@ -465,7 +461,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 			this.shadowCompositeRenderer = new ShadowCompositeRenderer(this, programSet.getPackDirectives(), programSet.getComposite(ProgramArrayId.ShadowComposite), programSet.getCompute(ProgramArrayId.ShadowComposite), this.shadowRenderTargets, this.shaderStorageBufferHolder, customTextureManager.getNoiseTexture(), updateNotifier,
 				customTextureManager.getCustomTextureIdMap(TextureStage.SHADOWCOMP), customImages, programSet.getPackDirectives().getExplicitFlips("shadowcomp_pre"), customTextureManager.getIrisCustomTextures(), customUniforms);
 
-			if (programSet.getPackDirectives().getShadowDirectives().isShadowEnabled().orElse(true) && !net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			if (programSet.getPackDirectives().getShadowDirectives().isShadowEnabled().orElse(true)) {
 				this.shadowRenderer = new ShadowRenderer(this, resolver.resolveNullable(ProgramId.ShadowSolid),
 					programSet.getPackDirectives(), shadowRenderTargets, shadowCompositeRenderer, customUniforms, programSet.getPack().hasFeature(FeatureFlags.SEPARATE_HARDWARE_SAMPLERS));
 			} else {
