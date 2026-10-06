@@ -8,66 +8,72 @@ Licensed LGPL-3.0 like upstream Iris.
 ## How the fork is structured (keep upstream merges cheap)
 
 * `upstream` remote = IrisShaders/Iris, our work lives on branch `metal`.
-* Iris' own files are changed **only in import lines**: `org.lwjgl.opengl.GLxxC` and (outside mixins)
+* Iris' own files are changed mostly **in import lines**: `org.lwjgl.opengl.GLxxC` and (outside mixins)
   `com.mojang.renderpearl.backend.opengl.GlStateManager` are imported from `net.irisshaders.iris.metal.gl` instead.
 * The facade classes in `net.irisshaders.iris.metal.gl` extend the originals, so every member is inherited and the
-  fork behaves identically on OpenGL. To support Metal, a facade *hides* a static method and routes it to MineMetal
-  when `MetalGlBridge.isMetal()` – everything else stays real OpenGL.
+  fork behaves identically on OpenGL. Functions Iris calls are re-declared there and routed to MineMetal's
+  `GLDispatch` / `MetalGL` when `MetalGlBridge.isMetal()`.
+* Every other Metal-specific change is guarded by `MetalGlBridge.isMetal()`; Metal-only code lives in
+  `net.irisshaders.iris.metal.MetalIris`, which is never loaded on OpenGL.
 * After merging a new upstream release, run `tools/swap-imports.py` so new upstream files use the facades too.
-
-## Roadmap
-
-| Stage | Scope |
-|---|---|
-| 0 | Feasibility (done): 197/198 BSL shaders translate GLSL → SPIR-V → MSL → Metal |
-| 1 | Post-processing: render targets, composite/deferred/final passes, uniforms |
-| 2 | G-buffers: terrain/entities through pack programs (hooks in MineMetal's render pass) |
-| 3 | Shadow pass |
-| 4 | Pack compatibility (BSL → Complementary), compute/SSBO/images via native Metal compute |
 
 ## Building
 
-`./metal.sh build` builds the Fabric jar and installs it into `../MineMetal/run/mods-stage0` for testing.
+`./metal.sh build` builds the Fabric jar and installs it into `../MineMetal/run/mods-stage0`.
+Usual loop: `cd ../MineMetal && ./mm.sh iris` (builds MineMetal + this fork, runs on Metal). Logs:
+`MineMetal/.reference/run.log`, `iris-build.log`, `.reference/logs/run-*.log`.
 
-## Stage 1 – post-processing on Metal (in progress)
+## Status (2026-10-06)
 
-When MineMetal's Metal backend is active (`MetalGlBridge.isMetal()`), the fork:
+| Stage | Scope | |
+|---|---|---|
+| 0 | Feasibility: BSL shaders translate GLSL → SPIR-V → MSL | ✅ |
+| 1 | Post-processing: render targets, deferred/composite/final passes, uniforms | ✅ |
+| 2 | G-buffers: terrain (Sodium), entities, particles, sky, hand through pack programs | ✅ |
+| 3 | Shadow pass and shadow composites | ✅ |
+| 4 | Compute shaders, image load/store, SSBOs, per-buffer blending, >16 samplers | ✅ |
 
-- routes all GL calls through the generated facades in `net.irisshaders.iris.metal.gl` to MineMetal's `GLDispatch`/`MetalGL`;
-- uses the bind-based (non-DSA) code paths, no compute / image load-store / SSBO / per-buffer blending;
-- gives renderpearl textures GL names (`MixinGpuTexture2` → `MetalIris.glId`) and binds Minecraft's main target as an
-  emulated framebuffer (`MixinRenderTarget` → `MetalIris.bindFramebuffer`);
-- replaces the "custom pass on a renderpearl RenderPass" trick (final pass, center depth sampler) with direct emulated draws;
-- does **not** create gbuffer or shadow programs, does not render shadows, keeps Sodium's compact vertex format and
-  Minecraft's reversed-Z projection – the world is still drawn by the vanilla Metal pipelines;
-- copies the main color target into `colortex0` before the composite passes so deferred/composite/final have a scene.
+Tested on an M2 MacBook Air: BSL 10.1.8, Complementary Reimagined r5.9.3, Complementary Unbound r5.9.3 (all
+profiles, including colored lighting / voxel light propagation), MakeUp Ultra Fast 9.5g, Sildur's Vibrant 2.02.
 
-Build order: `cd ../MineMetal && ./mm.sh build`, then `./metal.sh build`, then `cd ../MineMetal && ./mm.sh run -PirisMetal`.
+## How shader packs run on Metal
 
-### Status (2026-10-05)
+* **GL emulation.** All GL calls go through the facades to MineMetal's `MetalGL`, an emulation of the GL subset Iris
+  uses. Programs are compiled GLSL → SPIR-V (shaderc, relaxed Vulkan rules so loose uniforms form an implicit
+  block) → MSL (SPIRV-Cross). Iris uses the bind-based (non-DSA) code paths.
+* **Post-processing** (deferred, composite, final, shadowcomp, center depth) draws straight through the emulation
+  (`MetalIris.drawFullscreenPass`) instead of Iris' "custom pass on a renderpearl RenderPass" trick.
+* **World and shadow shaders.** `MixinShaderManager_Overrides` builds a MineMetal `GlOverridePipeline` per Iris
+  program. Inside Minecraft's Metal render passes it switches the encoder to the pack's framebuffer (or the shadow
+  map), binds resources through the same GL binding points Iris uses on OpenGL, and switches back for vanilla draws.
+  While shadows render, the depth compare is mirrored (the shadow map uses forward depth, like Iris on GL), culling
+  is off and vanilla draws are skipped.
+* **Reversed Z** stays native: Iris' shader transforms (`DepthTransformer`) handle it, as on Vulkan.
+* **Stage 4.** Compute programs become Metal compute pipelines; `glDispatchCompute(Indirect)` runs them in a compute
+  encoder. Storage images are bound by GL image unit (textures get shader-write usage the first time they are bound
+  as images), SSBOs by GL binding point; MSL 3.1 is used for these programs (native texture atomics).
+* **Limits.** Metal has 16 sampler states per stage: programs with more samplers share slots between samplers with
+  identical state (compiled per sharing pattern). 32 texture units, 8 image units, 9 SSBOs.
 
-Stage 1 works on an M2: BSL's deferred/composite/final passes run on Metal at 60 fps (vsync). Expected for now:
-washed-out image (passes run on an already-lit vanilla image, reversed-Z depth so no fog) and no shadows.
+## Behaviour differences on Metal
 
-Next – stage 2 (gbuffers): let ShaderMap build the pack's gbuffer programs on Metal and make the world draw with them:
-1. ExtendedShader/FallbackShader extend Mojang's GlProgram – need a Metal-side equivalent (a renderpearl pipeline
-   whose shaders are the Iris-patched GLSL, compiled through MineMetal's GLSL→SPIR-V→MSL path).
-2. Re-enable the extended vertex formats (IrisVertexFormats.TERRAIN etc.) once those pipelines consume them.
-3. Undo reversed-Z on Metal too (flip clears + depth compare ops in MineMetal while a pack is active).
-4. Drop the colortex0 copy in MetalIris once gbuffers write the scene.
-Then stage 3 (shadow pass) and stage 4 (compute / image load-store / SSBOs via native Metal compute).
+* `MC_OS_MAC` is **not** defined on Metal (packs use it to avoid Apple's OpenGL 4.1 limits, which do not apply
+  here); `MINEMETAL` is defined instead. `-Dminemetal.reportMacOS=true` restores `MC_OS_MAC`.
+* GLSL below `#version 430` gets `GL_ARB_shading_language_420pack`, `GL_ARB_shader_storage_buffer_object`,
+  `GL_ARB_shader_image_load_store` and `GL_ARB_explicit_uniform_location` enabled (GL drivers accept those
+  features there; glslang is strict).
+* A colortex bound for image load/store from inside a world pass is made writable at the end of the frame; such
+  writes are missing for the first frame after a pack loads.
+* PBR normal/specular maps use a nearest, mipmapped sampler (no anisotropy).
 
-Iteration loop: `cd ../MineMetal && ./mm.sh iris` (builds MineMetal + this fork, runs on Metal); logs in
-`MineMetal/.reference/run.log` and `iris-build.log`.
+## Debugging (MineMetal flags, `-PmmArgs="..."`)
 
-### Status (2026-10-05, later)
+`-Dminemetal.gpuProfile=true` (per-phase GPU/CPU times), `-Dminemetal.glSelfTest=true`,
+`-Dminemetal.dumpShaders=true` (MSL of rejected programs), `-Dminemetal.debugSolid` / `debugNoDepth` /
+`debugEntityFormat` / `debugVertices` = <pipeline name substring>, `-Dminemetal.traceFrame=true`,
+`-Dminemetal.noCoalesce=true`.
 
-Stage 2 works: BSL's gbuffer programs draw terrain (Sodium), sky, clouds, entities, items, particles and the hand on
-Metal at ~90 fps on an M2 (MineMetal override pipelines + GL emulation). Reversed Z stays native (Iris' shader depth
-transforms handle it, as on Vulkan). Key fixes on the way: unique uniform-block/sampler bindings before SPIRV-Cross
-(aliasing broke entity transforms), GL-style persistent UBO binding points, int/uint attribute signedness, default
-values for missing vertex attributes. Debug switches (MineMetal): -Dminemetal.debugSolid / debugNoDepth /
-debugEntityFormat / debugVertices = <pipeline substring>, -Dminemetal.traceFrame=true.
+## Next
 
-Next: stage 3 – the shadow pass (ShadowRenderer on Metal: shadow programs, shadow render targets, depth flip for the
-shadow projection), then stage 4 (compute, image load/store, SSBOs).
+Performance at full Retina resolution (heavy packs are GPU-bound there), then wider pack testing
+(Photon, Rethinking Voxels, Solas, …).
