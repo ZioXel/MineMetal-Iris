@@ -58,10 +58,11 @@ public class IrisRenderSystem {
 
 	public static void initRenderer() {
 		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
-			// MineMetal's GL emulation is bind-based; no DSA, multibind, compute or tessellation (yet).
+			// MineMetal's GL emulation is bind-based; no DSA, multibind or tessellation. Compute shaders, image
+			// load/store and SSBOs are emulated (MineMetal stage 4).
 			dsaState = new DSAUnsupported();
 			hasMultibind = false;
-			supportsCompute = false;
+			supportsCompute = true;
 			supportsTesselation = false;
 			perspectiveProjectionMatrixBuffer = new ProjectionMatrixBuffer("Iris shadow map projection");
 			samplers = new int[SamplerLimits.get().getMaxTextureUnits()];
@@ -291,7 +292,10 @@ public class IrisRenderSystem {
 
 	public static void bindImageTexture(int unit, int texture, int level, boolean layered, int layer, int access, int format) {
 		RenderSystem.assertOnRenderThread();
-		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return;
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			GL42C.glBindImageTexture(unit, texture, level, layered, layer, access, format);
+			return;
+		}
 		if (GL.getCapabilities().OpenGL42 || GL.getCapabilities().GL_ARB_shader_image_load_store) {
 			GL42C.glBindImageTexture(unit, texture, level, layered, layer, access, format);
 		} else {
@@ -300,7 +304,7 @@ public class IrisRenderSystem {
 	}
 
 	public static int getMaxImageUnits() {
-		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return 0;
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return GlStateManager._getInteger(GL42C.GL_MAX_IMAGE_UNITS);
 		if (GL.getCapabilities().OpenGL42 || GL.getCapabilities().GL_ARB_shader_image_load_store) {
 			return GlStateManager._getInteger(GL42C.GL_MAX_IMAGE_UNITS);
 		} else if (GL.getCapabilities().GL_EXT_shader_image_load_store) {
@@ -311,12 +315,12 @@ public class IrisRenderSystem {
 	}
 
 	public static boolean supportsSSBO() {
-		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return false;
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return true;
 		return GL.getCapabilities().OpenGL44 || (GL.getCapabilities().GL_ARB_shader_storage_buffer_object && GL.getCapabilities().GL_ARB_buffer_storage);
 	}
 
 	public static boolean supportsImageLoadStore() {
-		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return false;
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return true;
 		return GL.getCapabilities().glBindImageTexture != 0L || GL.getCapabilities().OpenGL42 || ((GL.getCapabilities().GL_ARB_shader_image_load_store || GL.getCapabilities().GL_EXT_shader_image_load_store) && GL.getCapabilities().GL_ARB_buffer_storage);
 	}
 

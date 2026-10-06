@@ -31,6 +31,11 @@ public final class MetalIris {
 		dev.minemetal.client.metal.MetalRenderPass.setSkipVanillaDraws(net.irisshaders.iris.shadows.ShadowRenderingState::areShadowsCurrentlyBeingRendered);
 	}
 
+	/** glClearTexImage(texture, 0, ..., null): clears a shader pack image to zero. */
+	public static void clearImage(int texture) {
+		MetalGL.glClearTexImage(texture, 0);
+	}
+
 	public static void phase(String name) {
 		dev.minemetal.client.metal.MetalProfiler.phase(name);
 	}
