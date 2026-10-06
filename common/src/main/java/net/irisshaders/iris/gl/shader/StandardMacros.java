@@ -52,6 +52,10 @@ public class StandardMacros {
 		define(standardDefines, "MC_GL_VERSION", getGlVersion(GL20C.GL_VERSION));
 		define(standardDefines, "MC_GLSL_VERSION", getGlVersion(GL20C.GL_SHADING_LANGUAGE_VERSION));
 		define(standardDefines, getOsString());
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			// Lets packs detect MineMetal (Iris on Metal through MineMetal's GL emulation).
+			define(standardDefines, "MINEMETAL");
+		}
 		define(standardDefines, getVendor());
 		define(standardDefines, getRenderer());
 		define(standardDefines, "IS_IRIS");
@@ -252,6 +256,12 @@ public class StandardMacros {
 	 * @see <a href="https://github.com/sp614x/optifine/blob/9c6a5b5326558ccc57c6490b66b3be3b2dc8cbef/OptiFineDoc/doc/shaders.txt#L709-L714">Optifine Doc</a>
 	 */
 	public static String getOsString() {
+		// MineMetal: packs use MC_OS_MAC to work around Apple's OpenGL 4.1 driver (no compute shaders, SSBOs or image
+		// load/store) and disable those features. On Metal they are emulated by MineMetal, so report no Mac there;
+		// -Dminemetal.reportMacOS=true restores MC_OS_MAC.
+		if (Util.getPlatform() == Util.OS.OSX && net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal() && !Boolean.getBoolean("minemetal.reportMacOS")) {
+			return "MC_OS_UNKNOWN";
+		}
 		return switch (Util.getPlatform()) {
 			case OSX -> "MC_OS_MAC";
 			case LINUX -> "MC_OS_LINUX";

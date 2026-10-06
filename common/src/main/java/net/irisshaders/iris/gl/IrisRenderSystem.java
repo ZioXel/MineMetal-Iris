@@ -353,7 +353,7 @@ public class IrisRenderSystem {
 	}
 
 	public static boolean supportsBufferBlending() {
-		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return false;
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) return true; // Metal blends per color attachment
 		return GL.getCapabilities().GL_ARB_draw_buffers_blend || GL.getCapabilities().OpenGL40;
 	}
 
@@ -384,7 +384,7 @@ public class IrisRenderSystem {
 	public static void blendFuncSeparatei(int buffer, int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) {
 		RenderSystem.assertOnRenderThread();
 		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
-			GlStateManager._blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+			net.irisshaders.iris.metal.MetalIris.blendFuncSeparatei(buffer, srcRGB, dstRGB, srcAlpha, dstAlpha);
 			return;
 		}
 		ARBDrawBuffersBlend.glBlendFuncSeparateiARB(buffer, srcRGB, dstRGB, srcAlpha, dstAlpha);

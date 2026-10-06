@@ -31,6 +31,10 @@ public final class MetalIris {
 		dev.minemetal.client.metal.MetalRenderPass.setSkipVanillaDraws(net.irisshaders.iris.shadows.ShadowRenderingState::areShadowsCurrentlyBeingRendered);
 	}
 
+	public static void blendFuncSeparatei(int buffer, int srcRgb, int dstRgb, int srcAlpha, int dstAlpha) {
+		MetalGL.glBlendFuncSeparatei(buffer, srcRgb, dstRgb, srcAlpha, dstAlpha);
+	}
+
 	/** glClearTexImage(texture, 0, ..., null): clears a shader pack image to zero. */
 	public static void clearImage(int texture) {
 		MetalGL.glClearTexImage(texture, 0);
