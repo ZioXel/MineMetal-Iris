@@ -20,6 +20,10 @@ Metal-specific changes are marked `MetalGlBridge.isMetal()` and documented in [d
 Tested on an M2: BSL, Complementary Reimagined, Complementary Unbound (up to its top profile, with colored lighting),
 MakeUp Ultra Fast, Sildur's Vibrant.
 
+**Install:** download the jar from [Releases](https://github.com/ZioXel/MineMetal-Iris/releases) and use it instead of
+the official Iris, together with [MineMetal](https://github.com/ZioXel/MineMetal/releases) and Sodium 0.9.x
+(Minecraft 26.3, Fabric, Apple Silicon Mac).
+
 **Build:** clone next to MineMetal, build MineMetal first, then `./metal.sh build` (or just run `../MineMetal/mm.sh iris`).
 
 ---
