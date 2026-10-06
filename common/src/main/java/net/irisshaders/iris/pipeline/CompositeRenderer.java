@@ -286,6 +286,7 @@ public class CompositeRenderer {
 		for (int i = 0, passesSize = passes.size(); i < passesSize; i++) {
 			Pass compositePass = passes.get(i);
 			GLDebug.pushGroup(20 * this.compositePass.ordinal() + i, compositePass.name);
+			net.irisshaders.iris.metal.gl.MetalGlBridge.phase("pass:" + compositePass.name);
 			boolean ranCompute = false;
 			for (ComputeProgram computeProgram : compositePass.computes) {
 				if (computeProgram != null) {
