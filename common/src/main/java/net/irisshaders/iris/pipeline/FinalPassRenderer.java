@@ -197,6 +197,8 @@ public class FinalPassRenderer {
 	}
 
 	public void renderFinalPass() {
+		net.irisshaders.iris.metal.gl.MetalGlBridge.phase("final");
+		try {
 		final com.mojang.blaze3d.pipeline.RenderTarget main = Minecraft.getInstance().gameRenderer.mainRenderTarget();
 		final int baseWidth = main.width;
 		final int baseHeight = main.height;
@@ -324,6 +326,9 @@ public class FinalPassRenderer {
 		}
 
 		GlStateManager._activeTexture(GL15C.GL_TEXTURE0);
+			} finally {
+			net.irisshaders.iris.metal.gl.MetalGlBridge.phase("gui");
+		}
 	}
 
 	public void recalculateSwapPassSize() {

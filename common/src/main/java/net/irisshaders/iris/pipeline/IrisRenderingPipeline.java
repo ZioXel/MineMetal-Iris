@@ -876,6 +876,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 
 	@Override
 	public void beginLevelRendering() {
+		net.irisshaders.iris.metal.gl.MetalGlBridge.phase("world");
 
 		isRenderingWorld = true;
 
@@ -1029,6 +1030,7 @@ public class IrisRenderingPipeline implements WorldRenderingPipeline, ShaderRend
 	@Override
 	public void renderShadows(LevelRendererAccessor worldRenderer, Camera playerCamera, CameraRenderState renderState) {
 		if (shadowRenderer != null) {
+			net.irisshaders.iris.metal.gl.MetalGlBridge.phase("shadow");
 			this.shadowRenderer.renderShadows(worldRenderer, playerCamera, renderState);
 		}
 

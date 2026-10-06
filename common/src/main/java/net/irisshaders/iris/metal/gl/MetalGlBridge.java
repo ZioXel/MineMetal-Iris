@@ -10,6 +10,13 @@ public final class MetalGlBridge {
 	private MetalGlBridge() {
 	}
 
+	/** Marks a frame phase for MineMetal's profiler (-Dminemetal.gpuProfile); no-op on OpenGL. */
+	public static void phase(String name) {
+		if (isMetal()) {
+			net.irisshaders.iris.metal.MetalIris.phase(name);
+		}
+	}
+
 	/** True when the active renderpearl device is MineMetal's Metal backend (cached once the device exists). */
 	public static boolean isMetal() {
 		int s = state;
