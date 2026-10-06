@@ -13,9 +13,12 @@ Metal-specific changes are marked `MetalGlBridge.isMetal()` and documented in [d
 | | |
 |---|---|
 | Post-processing (deferred / composite / final) | ✅ |
-| World shaders (terrain via Sodium, entities, particles, sky, hand) | ✅ BSL at ~90 fps on an M2 |
-| Shadows | 🚧 next |
-| Compute, image load-store, SSBOs | ⏳ later |
+| World shaders (terrain via Sodium, entities, particles, sky, hand) | ✅ |
+| Shadows (incl. shadow composites) | ✅ |
+| Compute, image load-store (incl. atomics), SSBOs, per-buffer blending | ✅ |
+
+Tested on an M2: BSL, Complementary Reimagined, Complementary Unbound (up to its top profile, with colored lighting),
+MakeUp Ultra Fast, Sildur's Vibrant.
 
 **Build:** clone next to MineMetal, build MineMetal first, then `./metal.sh build` (or just run `../MineMetal/mm.sh iris`).
 
