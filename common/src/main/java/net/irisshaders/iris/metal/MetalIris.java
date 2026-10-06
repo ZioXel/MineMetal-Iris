@@ -31,6 +31,10 @@ public final class MetalIris {
 		dev.minemetal.client.metal.MetalRenderPass.setSkipVanillaDraws(net.irisshaders.iris.shadows.ShadowRenderingState::areShadowsCurrentlyBeingRendered);
 	}
 
+	public static void phase(String name) {
+		dev.minemetal.client.metal.MetalProfiler.phase(name);
+	}
+
 	/** GL name of a renderpearl texture inside MineMetal's GL emulation. */
 	public static int glId(GpuTexture texture) {
 		return MetalGL.registerExternalTexture(texture);

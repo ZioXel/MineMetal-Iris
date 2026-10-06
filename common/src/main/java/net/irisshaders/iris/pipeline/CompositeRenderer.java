@@ -269,6 +269,8 @@ public class CompositeRenderer {
 	}
 
 	public void renderAll() {
+		net.irisshaders.iris.metal.gl.MetalGlBridge.phase("composite");
+		try {
 		ImmediateState.temporarilyIgnorePass = true;
 
 		GLDebug.pushGroup(20 + compositePass.ordinal(), compositePass.name().toLowerCase(Locale.ROOT));
@@ -358,6 +360,9 @@ public class CompositeRenderer {
 
 		ImmediateState.temporarilyIgnorePass = false;
 
+			} finally {
+			net.irisshaders.iris.metal.gl.MetalGlBridge.phase("world");
+		}
 	}
 
 	// TODO: Don't just copy this from DeferredWorldRenderingPipeline

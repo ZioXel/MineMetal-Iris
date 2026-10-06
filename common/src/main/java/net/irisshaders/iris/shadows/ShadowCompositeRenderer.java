@@ -192,6 +192,8 @@ public class ShadowCompositeRenderer {
 	}
 
 	public void renderAll() {
+		net.irisshaders.iris.metal.gl.MetalGlBridge.phase("shadowcomp");
+		try {
 		GpuBuffer indices = RenderSystem.getSequentialBuffer(PrimitiveTopology.QUADS).getBuffer(6);
 		com.mojang.renderpearl.api.pipeline.IndexType type = RenderSystem.getSequentialBuffer(PrimitiveTopology.QUADS).type();
 
@@ -274,6 +276,9 @@ public class ShadowCompositeRenderer {
 		 */
 
 		GlStateManager._activeTexture(GL15C.GL_TEXTURE0);
+			} finally {
+			net.irisshaders.iris.metal.gl.MetalGlBridge.phase("world");
+		}
 	}
 
 	// TODO: Don't just copy this from DeferredWorldRenderingPipeline
