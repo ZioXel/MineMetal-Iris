@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "iris",
   "version": "${version}",
-  "name": "Iris",
-  "description": "A modern shaders mod for Minecraft intended to be compatible with existing OptiFine shader packs",
+  "name": "Iris (MineMetal)",
+  "description": "Iris fork that also runs shader packs on Apple Metal with MineMetal (github.com/ZioXel/MineMetal-Iris). A modern shaders mod for Minecraft intended to be compatible with existing OptiFine shader packs",
   "authors": [
     "coderbot",
     "IMS212",
