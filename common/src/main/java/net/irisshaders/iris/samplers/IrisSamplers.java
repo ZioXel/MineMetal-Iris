@@ -256,6 +256,11 @@ public class IrisSamplers {
 	}
 
 	public static GlSampler getTerrainCacheIris(int i) {
+		if (net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal()) {
+			// MineMetal: renderpearl samplers are Metal objects, not GL sampler names; use the equivalent GL sampler
+			// (nearest, mipmapped) of MineMetal's GL emulation for PBR normal/specular maps.
+			return GlSampler.MIPPED_NEAREST_NEAREST;
+		}
 		if (WorldRenderingSettings.INSTANCE.breaksAnisotropy()) i = 1;
 		if (terrainS[i] == null) {
 			terrainS[i] = new GlSampler(((com.mojang.renderpearl.backend.opengl.GlSampler) getTerrainCache(i)).getId());
