@@ -23,6 +23,11 @@ import org.lwjgl.opengl.GL30C;
  * class (and MineMetal's classes it references) is never loaded when Iris runs on OpenGL.
  */
 public final class MetalIris {
+	/** MineMetal setting "Shadows Every 2nd Frame". */
+	public static boolean shadowHalfRate() {
+		return dev.minemetal.client.upscale.MetalUpscaler.shadowHalfRate();
+	}
+
 	private MetalIris() {
 	}
 

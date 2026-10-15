@@ -386,8 +386,38 @@ public class ShadowRenderer {
 		GlStateManager._viewport(0, 0, resolution, resolution);
 	}
 
+	// MineMetal "Shadows Every 2nd Frame": the shadow map rendered on the previous frame is reused, with its model-view
+	// matrix moved by the camera's movement since then so it still lines up with the world.
+	private Matrix4f mm$renderedModelView;
+	private double mm$renderedCamX, mm$renderedCamY, mm$renderedCamZ;
+	private boolean mm$skipNext;
+
+	private boolean mm$reuseLastShadowMap() {
+		if (!net.irisshaders.iris.metal.gl.MetalGlBridge.isMetal() || !net.irisshaders.iris.metal.MetalIris.shadowHalfRate()) {
+			this.mm$skipNext = false;
+			return false;
+		}
+		boolean skip = this.mm$skipNext && this.mm$renderedModelView != null;
+		this.mm$skipNext = !skip;
+		if (!skip) {
+			return false;
+		}
+		Vector3d cam = CameraUniforms.getUnshiftedCameraPosition();
+		double dx = cam.x - this.mm$renderedCamX, dy = cam.y - this.mm$renderedCamY, dz = cam.z - this.mm$renderedCamZ;
+		if (dx * dx + dy * dy + dz * dz > 16.0) {
+			this.mm$skipNext = true; // teleport / fast travel: render a fresh map now
+			return false;
+		}
+		// A point p relative to the current camera is (p + cam - renderedCam) relative to the camera the map was drawn from.
+		MODELVIEW = new Matrix4f(this.mm$renderedModelView).translate((float) dx, (float) dy, (float) dz);
+		return true;
+	}
+
 	public void renderShadows(LevelRendererAccessor levelRenderer, Camera playerCamera, CameraRenderState renderState) {
 		if (IrisVideoSettings.getOverriddenShadowDistance(IrisVideoSettings.shadowDistance) == 0) {
+			return;
+		}
+		if (this.mm$reuseLastShadowMap()) {
 			return;
 		}
 
@@ -420,6 +450,11 @@ public class ShadowRenderer {
 		// Create our camera
 		PoseStack modelView = createShadowModelView(this.sunPathRotation, this.intervalSize, nearPlane, farPlane);
 		MODELVIEW = new Matrix4f(modelView.last().pose());
+		this.mm$renderedModelView = new Matrix4f(MODELVIEW);
+		Vector3d mmCam = CameraUniforms.getUnshiftedCameraPosition();
+		this.mm$renderedCamX = mmCam.x;
+		this.mm$renderedCamY = mmCam.y;
+		this.mm$renderedCamZ = mmCam.z;
 		Matrix4f cameraViewRotation = new Matrix4f(levelRenderState.cameraRenderState.viewRotationMatrix);
 		Matrix4f cameraProjection = new Matrix4f(levelRenderState.cameraRenderState.projectionMatrix);
 		levelRenderState.cameraRenderState.viewRotationMatrix = MODELVIEW;
