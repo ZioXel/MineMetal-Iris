@@ -48,6 +48,10 @@ profiles, including colored lighting / voxel light propagation), MakeUp Ultra Fa
   map), binds resources through the same GL binding points Iris uses on OpenGL, and switches back for vanilla draws.
   While shadows render, the depth compare is mirrored (the shadow map uses forward depth, like Iris on GL), culling
   is off and vanilla draws are skipped.
+* **Shadows every 2nd frame** (minemetal.2, MineMetal setting, off by default): `ShadowRenderer.renderShadows`
+  skips every other frame and keeps the last shadow map; `ShadowRenderer.MODELVIEW` is set to the model-view the map
+  was rendered with, translated by the camera movement since then, so the map stays aligned with the world. A camera
+  jump of more than 4 blocks renders a fresh map immediately.
 * **Reversed Z** stays native: Iris' shader transforms (`DepthTransformer`) handle it, as on Vulkan.
 * **Stage 4.** Compute programs become Metal compute pipelines; `glDispatchCompute(Indirect)` runs them in a compute
   encoder. Storage images are bound by GL image unit (textures get shader-write usage the first time they are bound
